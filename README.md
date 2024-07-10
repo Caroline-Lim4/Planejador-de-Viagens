@@ -1,3 +1,3 @@
-﻿# Planejador-de-Viagens - Next Level Week Journey - Rocketseat
+﻿## Planejador de Viagens - (NLW Journey | Rocketseat)
 
 Projeto em desenvolvimento.
