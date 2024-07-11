@@ -1,20 +1,28 @@
 import React, { useState } from 'react'
 import { MapPin, Calendar, ArrowRight, Settings2, X } from 'lucide-react' // biblioteca de icones
 import { Button } from '../../../components/button'
-import { DayPicker } from 'react-day-picker'
+import { DateRange, DayPicker } from 'react-day-picker'
 import "react-day-picker/dist/style.css";
+import { format } from 'date-fns'
 
 // estrutura que armazena as propriedades necessarias do elemento pai p/ elemento filho
 interface DestinationAndDateStepProps {
     isGuestsInputOpen: boolean
     openGuestsInput: () => void
     closeGuestsInput: () => void
+    setDestination: (destination: string) => void
+    setEventStartAndEndDates: (dates: DateRange | undefined) => void 
+    eventStartAndEndDates: DateRange | undefined
 }
 
 export function DestinationAndDateStep({
     isGuestsInputOpen, // função recebe propriedades como parametro
     openGuestsInput,
     closeGuestsInput,
+    setDestination,
+    setEventStartAndEndDates,
+    eventStartAndEndDates,
+
 }: DestinationAndDateStepProps) {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
 
@@ -26,18 +34,27 @@ export function DestinationAndDateStep({
         setIsDatePickerOpen(false)
     }
 
+    const displayedDate = eventStartAndEndDates && eventStartAndEndDates.from && eventStartAndEndDates.to ? 
+    format(eventStartAndEndDates.from, "d' de 'LLL").concat(' até ').concat(format(eventStartAndEndDates.to, "d' de 'LLL"))
+    : null
+
     return (
         <div className='h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-3'>
 
             <div className='flex items-center gap-2 flex-1'>
                 <MapPin className='size-5 text-zinc-400'/>
-                <input disabled={isGuestsInputOpen} type="text" placeholder='Para onde você vai?' className='bg-transparent text-lg placeholder-zinc-400 outline-none flex-1'/>
+                <input 
+                    disabled={isGuestsInputOpen} 
+                    type="text" placeholder='Para onde você vai?' 
+                    className='bg-transparent text-lg placeholder-zinc-400 outline-none flex-1'
+                    onChange={event => setDestination(event.target.value)}
+                    />
             </div>
 
-            <button onClick={openDatePicker} disabled={isGuestsInputOpen} className='flex items-center gap-2 text-left'>
+            <button onClick={openDatePicker} disabled={isGuestsInputOpen} className='flex items-center gap-2 text-left w-[240px]'>
                 <Calendar className='size-5 text-zinc-400'/>
-                <span className='text-lg text-zinc-400 w-40'>
-                    Quando?
+                <span className='text-lg text-zinc-400 w-40 flex-1'>
+                    {displayedDate || 'Quando?'} 
                 </span>
             </button>
             {/* modal */}
@@ -48,11 +65,11 @@ export function DestinationAndDateStep({
                             <div className='flex items-center justify-between'>
                                 <h2 className='text-lg font-semibold' >Selecionar data</h2>
                                 <button onClick={closeDatePicker} type='button'>
-                                <X className='size-5 text-zinc-400'/>
+                                    <X className='size-5 text-zinc-400'/>
                                 </button>
                             </div>      
                         </div>
-                        <DayPicker mode="range" />
+                        <DayPicker mode="range" selected={eventStartAndEndDates} onSelect={setEventStartAndEndDates} />
                     </div>  
                 </div>
             )}
