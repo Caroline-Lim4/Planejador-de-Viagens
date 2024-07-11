@@ -12,7 +12,7 @@ export function DestinationAndDateHeader() {
             <div className='flex items-center gap-5'>
                 <div className='flex items-center gap-2'>
                     <Calendar className='size-5 text-zinc-400'/>
-                     a <span className='text-zinc-100'>17 a 23 de Agosto</span>
+                     <span className='text-zinc-100'>17 a 23 de Agosto</span>
                 </div>
 
                 <div className='w-px h-6 bg-zinc-800'/>
